@@ -4,6 +4,25 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { netlifyPlugin } from "@netlify/remix-edge-adapter/plugin";
 import styleX from "vite-plugin-stylex";
 
+declare module "@remix-run/node" {
+  interface Future {
+    v3_singleFetch: true;
+  }
+}
+
 export default defineConfig({
-  plugins: [styleX(), remix(), netlifyPlugin(), tsconfigPaths()],
+  plugins: [
+    styleX(),
+    remix({
+      future: {
+        v3_fetcherPersist: true,
+        v3_relativeSplatPath: true,
+        v3_throwAbortReason: true,
+        v3_singleFetch: true,
+        v3_lazyRouteDiscovery: true,
+      },
+    }),
+    netlifyPlugin(),
+    tsconfigPaths(),
+  ],
 });
